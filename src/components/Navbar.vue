@@ -39,16 +39,9 @@ export default {
     },
     methods: {
         handleClick(item, name) {
-            if (name === '一级菜单') {
-                item.tagOne ? item.tagOne = false : item.tagOne = true
-            } else if (name === '关于') {
+            if (name === '一级菜单' || name === '关于') {
                 item.tagOne ? item.tagOne = false : item.tagOne = true
             }
-            // if (value === '一级菜单') {
-            //    this.tagOne === true  ? this.tagOne = false : this.tagOne = true
-            // } else if (value === '关于') {
-            //    this.tagTwo ? this.tagTwo = false : this.tagTwo = true
-            // }
         }
     }
 }
