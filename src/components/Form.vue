@@ -16,44 +16,44 @@
 </template>
 
 <script>
-    export default {
-        name: 'FormView',
-        props: {
-            tag: {
-                type: Boolean
-            },
-            edit: {
-                type: Object
-            }
+export default {
+    name: 'FormView',
+    props: {
+        tag: {
+            type: Boolean
         },
-        data() {
-            return {
-                name: '',
-                date: '',
-                address: '',
-                newid: 0 
+        edit: {
+            type: Object
+        }
+    },
+    data() {
+        return {
+            name: '',
+            date: '',
+            address: '',
+            newid: 0 
+        }
+    },
+    watch: {
+        edit(newval) {
+            this.name = newval.name,
+            this.date = newval.date,
+            this.address = newval.address,
+            this.newid = newval.id
+        }
+    },
+    methods: {
+        submitData() {
+            let obj = {
+                "name": this.name,
+                "date": this.date,
+                "address": this.address,
+                "id": parseInt(this.newid)
             }
-        },
-        watch: {
-            edit(newval) {
-                this.name = newval.name,
-                this.date = newval.date,
-                this.address = newval.address,
-                this.newid = newval.id
-            }
-        },
-        methods: {
-            submitData() {
-                let obj = {
-                    "name": this.name,
-                    "date": this.date,
-                    "address": this.address,
-                    "id": +this.newid
-                }
-                this.$emit('newData', obj)
-            }
+            this.$emit('newData', obj)
         }
     }
+}
 </script>
 
 <style>

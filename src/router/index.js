@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import List from '@/components/List'
-import SubOne from '@/components/subcomponents/SubOne'
-import SubTwo from '@/components/subcomponents/SubTwo'
+import SubOne from '@/views/SubOne'
+import SubTwo from '@/views/SubTwo'
 
 Vue.use(Router)
 

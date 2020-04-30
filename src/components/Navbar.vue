@@ -5,17 +5,11 @@
         </div>
         <div class="labels">
             <ul class="menu">
-                <li @click='handleClick("一级菜单")'>一级菜单
-                    <ul class="single" v-if="tagOne">
+                <li v-for="(item,index) in navs" :key="index" @click='handleClick(item, item.id)'>
+                    {{item.id}}
+                    <ul class="single" v-if="item.tagOne">
                         <li>
-                            <router-link :to="{ name: 'SubOne' }">主页</router-link>
-                        </li>
-                    </ul>
-                </li>
-                <li @click='handleClick("关于")'>关于
-                    <ul class="single" v-if="tagTwo">
-                        <li>
-                            <router-link :to= "{ name: 'SubTwo' }">二级菜单</router-link>
+                            <router-link :to="item.target">{{item.name}}</router-link>
                         </li>
                     </ul>
                 </li>
@@ -26,24 +20,38 @@
 </template>
 
 <script>
-    export default {
-        name: 'NavBar',
-        data() {
-            return {
+export default {
+    name: 'NavBar',
+    data() {
+        return {
+            navs: [{
+                id: "一级菜单",
+                name: '主页',
                 tagOne: false,
-                tagTwo: false
+                target: '/subone'
+                }, {
+                id: "关于",
+                name: '二级菜单',
+                tagOne: false,
+                target: '/subtwo'
+            }]
+        }
+    },
+    methods: {
+        handleClick(item, name) {
+            if (name === '一级菜单') {
+                item.tagOne ? item.tagOne = false : item.tagOne = true
+            } else if (name === '关于') {
+                item.tagOne ? item.tagOne = false : item.tagOne = true
             }
-        },
-        methods: {
-            handleClick(value) {
-                if (value === '一级菜单') {
-                   this.tagOne === true  ? this.tagOne = false : this.tagOne = true
-                } else if (value === '关于') {
-                   this.tagTwo ? this.tagTwo = false : this.tagTwo = true
-                }
-            }
+            // if (value === '一级菜单') {
+            //    this.tagOne === true  ? this.tagOne = false : this.tagOne = true
+            // } else if (value === '关于') {
+            //    this.tagTwo ? this.tagTwo = false : this.tagTwo = true
+            // }
         }
     }
+}
 </script>
 
 <style>

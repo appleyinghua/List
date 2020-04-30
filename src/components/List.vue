@@ -23,104 +23,108 @@
 </template>
 
 <script>
-    import FormView from '../components/Form.vue'
-    const url = require("../assets/down.png")
-    export default {
-        name: 'List',
-        components: {
-            FormView
-        },
-        data() {
-            return {
-                lists: [],
-                editVal: {},
-                bgImg: {
-                    backgroundImage: "url(" + url + ")",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "15px auto",
-                    backgroundPosition: 'right'
-                },
-                selected: '',
-                addTag: false,
-                options: [],
-                newItem: {'id':10, 'name':'zsh', 'date':'2020-09-20', 'address':'保定'}
-            }
-        },
-        mounted: function () {
-            this.getData()
-        },
-        computed: {
-            computedList() {
-                if (this.selected) {
-                    let arr = [];
-                    for(var i = 0; i < this.lists.length; i++) {
-                        if (this.lists[i].name.search(this.selected) !== -1) {
-                        arr.push(this.lists[i])
-                        }
-                    }
-                    return arr
-                } else {
-                    return this.lists
-                }
-            }
-        },
-        watch: {
-        },
-        methods: {
-            getData () {
-                var _this = this
-                _this.$http.get('./api/delete').then(function (res) {
-                    _this.lists = res.data.data
-                    _this.options = _this.lists.map((item) => {
-                    return item.name
-                    })
-                }).catch((error) => {
-                    console.log(error)
-                })
+import FormView from '../components/Form.vue'
+const url = require("../assets/down.png")
+export default {
+    name: 'List',
+    components: {
+        FormView
+    },
+    data() {
+        return {
+            lists: [],
+            editVal: {},
+            bgImg: {
+                backgroundImage: "url(" + url + ")",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "15px auto",
+                backgroundPosition: 'right'
             },
-            deleteItem(index) {
-                var _this = this
-                _this.$http.post('./api/delete',{
+            selected: '',
+            addTag: false,
+            options: [],
+            newItem: {'id':10, 'name':'zsh', 'date':'2020-09-20', 'address':'保定'}
+        }
+    },
+    mounted: function () {
+        this.getData()
+    },
+    computed: {
+        computedList() {
+            if (this.selected) {
+                let arr = [];
+                for(let i = 0; i < this.lists.length; i++) {
+                    if (this.lists[i].name.search(this.selected) !== -1) {
+                    arr.push(this.lists[i])
+                    }
+                }
+                return arr
+            } else {
+                return this.lists
+            }
+        }
+    },
+    watch: {
+    },
+    methods: {
+        getData () {
+            // var _this = this
+            this.$http.get('./api/delete').then((res) => {
+                this.lists = res.data.data
+                this.options = this.lists.map((item) => {
+                return item.name
+                })
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+        deleteItem(index) {
+            // var _this = this
+            this.$http.post('./api/delete',{
+                params: {
+                id: index
+                }
+            }).then((res) => {
+                this.lists = res.data.data
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+        incItem() {
+            this.addTag ? this.addTag = false : this.addTag = true
+            this.editVal = {}
+        },
+        addData(data) {
+            this.addTag = false
+            let resData = JSON.parse(JSON.stringify(this.editVal))
+            if (data.id === resData.id) {
+                this.$http.post('./api/edit', {
                     params: {
-                    id: index
+                        data: data
                     }
                 }).then((res) => {
                     this.lists = res.data.data
                 }).catch((error) => {
-                    console.log(error)
+                    console.log('编辑出错')
                 })
-            },
-            incItem() {
-                this.addTag ? this.addTag = false : this.addTag = true
-                this.editVal = {}
-            },
-            addData(data) {
-                this.addTag = false
-                let resData = JSON.parse(JSON.stringify(this.editVal))
-                if (data.id === resData.id) {
-                  this.$http.post('./api/edit', {
+            } else {
+                this.$http.post('./api/add', {
                     params: {
                         data: data
                     }
-                  }).then((res) => {
+                }).then((res) => {
                     this.lists = res.data.data
-                  })
-                } else {
-                    this.$http.post('./api/add', {
-                    params: {
-                        data: data
-                    }
-                    }).then((res) => {
-                        this.lists = res.data.data
-                    })
-                }
-            },
-            editList(item) {
-                this.editVal = item
-                this.addTag = true
+                }).catch((error) => {
+                    console.log('添加出错')
+                })
             }
+        },
+        editList(item) {
+            this.editVal = item
+            this.addTag = true
         }
     }
+}
 </script>
 
 <style scoped>
